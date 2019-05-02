@@ -1,0 +1,11 @@
+"*":
+  core:
+    telemetryConsent: "limited"
+    themes: [
+      "one-dark-ui"
+      "dracula-syntax"
+    ]
+  "exception-reporting":
+    userId: "80a89e4e-85eb-4a06-b4bf-42969d2606da"
+  welcome:
+    showOnStartup: false
