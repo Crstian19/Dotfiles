@@ -1,4 +1,4 @@
-#Power saving
+#Power saving=
 [settings]
 throttle-output = 20
 throttle-output-for = 40
@@ -8,17 +8,17 @@ screenchange-reload = true
 #Evil Scheming
 [colors]
 background = ${xrdb:color0:#222}
-foreground = ${xrdb:color7:#222}
-foreground-alt = ${xrdb:color7:#222}
+foreground = ${xrdb:color7:#eee}
+foreground-alt = ${xrdb:color7:#eee}
 primary = ${xrdb:color1:#222}
 secondary = ${xrdb:color2:#222}
 alert = ${xrdb:color3:#222}
 
 # Main and only bar
 [bar/Bar]
-modules-left = battery filesystem memory temperature cpu
+modules-left = battery filesystem memory temperature cpu info-airqualityindex
 modules-center = bspwm 
-modules-right = net-eth pingrtt player pulseaudio backlight date 
+modules-right = net-wifi net-eth pulseaudio backlight date 
 tray-position = right 
 
 font-0 = Terminus(TTF):size=9;4
@@ -30,10 +30,10 @@ font-3 = FontAwesome5Brands:style=solid:size=8;4
 bottom = true
 fixed-center = true
 wm-restack = bspwm
-height = 30
+height = 20
 
 line-size = 1
-overline-size = 3
+overline-size = 1
 underline-size = 1
 
 border-top-size = 0
@@ -94,24 +94,13 @@ type = internal/fs
 interval = 120
 
 mount-0 = /
-label-mounted =  %free%
+label-mounted =  %free% %percentage_used%%
 
 [module/memory]
 type = internal/memory
 interval = 5
 
-format = <label> <bar-used>
-label =  %percentage_used%%
-
-bar-used-indicator =
-bar-used-width = 30
-bar-used-foreground-0 = #55aa55
-bar-used-foreground-1 = #557755
-bar-used-foreground-2 = #f5a70a
-bar-used-foreground-3 = #ff5555
-bar-used-fill = ▐
-bar-used-empty = ▐
-bar-used-empty-foreground = #444444 
+label =  %percentage_used%% 
 
 [module/bspwm]
 type = internal/bspwm
@@ -142,10 +131,7 @@ label-empty-padding = 2
 [module/temperature]
 type = internal/temperature
 interval = 5
-
-hwmon-path = /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:02/ATK0110:00/hwmon/hwmon0/temp1_input
-
-
+thermal-zone = 0
 warn-temperature = 85
 
 format = <label>
@@ -156,25 +142,39 @@ label-warn = %{F#f00}%{F-} %temperature-c%
 
 [module/cpu]
 type = internal/cpu
-interval = 0.3
+interval = 3
 
-format = <label> <bar-load>
+format = <label> <ramp-coreload>
 
-label =  CPU %percentage%%
+label = %percentage%%
+ramp-coreload-0 = ▁
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+ramp-coreload-7 = %{F#f00}█%{F-}	
 
-bar-load-indicator =
-bar-load-width = 50
-bar-load-foreground-0 = #55aa55
-bar-load-foreground-1 = #557755
-bar-load-foreground-2 = #f5a70a
-bar-load-foreground-3 = #ff5555
-bar-load-fill = ▐
-bar-load-empty = ▐
-bar-load-empty-foreground = #444444
+[module/net-wifi]
+type = internal/network
+interface = wlp2s0
+#interface = wlan0
+interval = 3
+
+label-connected =  %essid% %local_ip%  %downspeed% %upspeed%
+label-disconnected =    
 
 [module/net-eth]
 type = internal/network
-interface = enp2s0
+interface = enp0s25
+interval = 3
+
+label-connected =   %local_ip%  %downspeed% %upspeed%
+
+[module/net-usb]
+type = internal/network
+interface = enp0s20u2
 interval = 3
 
 label-connected =   %local_ip%  %downspeed% %upspeed%
@@ -215,13 +215,9 @@ ramp-4 = 🌑
 [module/pingrtt]
 type = custom/script
 exec = .config/polybar/scripts/info-pingrtt.sh
-interval = 1
+interval = 5
 
-[module/player]
+[module/info-airqualityindex]
 type = custom/script
-exec = .config/polybar/scripts/player-mpris-simple.sh
-interval = 1
-click-left = playerctl previous
-click-right = playerctl next
-click-middle = playerctl play-pause
-
+exec = ~/.config/polybar/scripts/info-airqualityindex.sh
+interval = 600
