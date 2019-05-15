@@ -16,9 +16,9 @@ alert = ${xrdb:color3:#222}
 
 # Main and only bar
 [bar/Bar]
-modules-left = battery filesystem memory temperature cpu
+modules-left = filesystem memory temp-cpu temp-gpu cpu info-hackspeed system-usb-udev
 modules-center = bspwm 
-modules-right = net-eth pingrtt player pulseaudio backlight date 
+modules-right = info-airqualityindex net-eth pingrtt player pulseaudio backlight date 
 tray-position = right 
 
 font-0 = Terminus(TTF):size=9;4
@@ -94,14 +94,13 @@ type = internal/fs
 interval = 120
 
 mount-0 = /
-label-mounted =  %free%
+label-mounted =  %free% %percentage_used%%
 
 [module/memory]
 type = internal/memory
-interval = 5
-
+interval = 1
 format = <label> <bar-used>
-label =  %percentage_used%%
+label = � %percentage_used%%
 
 bar-used-indicator =
 bar-used-width = 30
@@ -139,45 +138,41 @@ label-empty = %name%
 label-empty-foreground = #55
 label-empty-padding = 2
 
-[module/temperature]
+[module/temp-cpu]
 type = internal/temperature
-interval = 5
-
-hwmon-path = /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:02/ATK0110:00/hwmon/hwmon0/temp1_input
-
-
+interval = 1
+hwmon-path = /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon1/temp1_input
 warn-temperature = 85
 
 format = <label>
 format-warn = <label-warn>
 
 label =  %temperature-c%
-label-warn = %{F#f00}%{F-} %temperature-c%
+label-warn = %{F#f00}%{F-} CPU %temperature-c%
 
 [module/cpu]
 type = internal/cpu
 interval = 0.3
 
-format = <label> <bar-load>
+format = <label> <ramp-coreload>
 
-label =  CPU %percentage%%
+label =  %percentage%%
 
-bar-load-indicator =
-bar-load-width = 50
-bar-load-foreground-0 = #55aa55
-bar-load-foreground-1 = #557755
-bar-load-foreground-2 = #f5a70a
-bar-load-foreground-3 = #ff5555
-bar-load-fill = ▐
-bar-load-empty = ▐
-bar-load-empty-foreground = #444444
+ramp-coreload-0 = ▁
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+ramp-coreload-7 = %{F#f00}█%{F-}	
 
 [module/net-eth]
 type = internal/network
-interface = enp2s0
+interface = enp4s0
 interval = 3
 
-label-connected =   %local_ip%  %downspeed% %upspeed%
+label-connected =   %local_ip% ��� %downspeed%  %upspeed%
 
 [module/date]
 type = internal/date
@@ -219,9 +214,25 @@ interval = 1
 
 [module/player]
 type = custom/script
-exec = .config/polybar/scripts/player-mpris-simple.sh
+exec = ~/.config/polybar/scripts/player-mpris-simple.sh
 interval = 1
 click-left = playerctl previous
 click-right = playerctl next
 click-middle = playerctl play-pause
 
+[module/info-airqualityindex]
+type = custom/script
+exec = ~/.config/polybar/scripts/info-airqualityindex.sh
+interval = 600
+
+#[module/info-hackspeed]
+#type = custom/script
+#exec = ~/.config/polybar/scripts/info-hackspeed.sh
+#tail = true
+
+[module/system-usb-udev]
+type = custom/script
+exec = ~/.config/polybar/scripts/system-usb-udev.sh
+tail = true
+click-left = ~/polybar-scripts/system-usb-udev.sh --mount
+click-right = ~/polybar-scripts/system-usb-udev.sh --unmount

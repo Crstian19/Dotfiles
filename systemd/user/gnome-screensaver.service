@@ -1,0 +1,10 @@
+[Unit]
+Description=Gnome lock screen
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/gnome-screensaver 
+
+[Install]
+WantedBy=user-graphical.target
+

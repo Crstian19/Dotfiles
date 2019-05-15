@@ -1,0 +1,6 @@
+[Unit]
+Description=Xorg server at display 
+
+[Service]
+Type=simple
+ExecStart=startx

@@ -27,7 +27,7 @@ bspc config focus_by_distance    true
 bspc config history_aware_focus  true
 
 # Rules
-bspc rule -a Nightly desktop=^2 state=tiled
+bspc rule -a Nightly desktop=^1 state=tiled
 bspc rule -a Nightly:Browser state=floating
 bspc rule -a Nightly:Dialog state=floating
 bspc rule -a Nightly:firefox state=floating

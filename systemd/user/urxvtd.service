@@ -1,0 +1,10 @@
+[Unit]
+Description=Urxvt daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/urxvtd 
+
+[Install]
+WantedBy=user-graphical.target
+
