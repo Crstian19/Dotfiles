@@ -100,7 +100,7 @@ label-mounted =  %free% %percentage_used%%
 type = internal/memory
 interval = 1
 format = <label> <ramp-used>
-label = � %percentage_used%%
+label =  %percentage_used%%
 
 ramp-used-0 = ▁
 ramp-used-1 = ▂
